@@ -20,12 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
   coinSelect.addEventListener("change", readValue);
 });
 
-function requestCrytCoins() {
+async function requestCrytCoins() {
   const url = `https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=CRC`;
   fetch(url)
     .then((res) => res.json())
     .then((res) => getCrytCoins(res.Data))
     .then((crytcoins) => selectCrytcoins(crytcoins));
+
+  try {
+    const res = await fetch(url);
+    const result = await res.json();
+    const crytcoins = await getCrytCoins(result.Data);
+    selectCrytcoins(crytcoins);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function selectCrytcoins(crytcoins) {
