@@ -56,15 +56,17 @@ function submitForm(e) {
   requestAPI();
 }
 
-function requestAPI() {
+async function requestAPI() {
   const { coin, crytCoin } = searchObj;
   const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${crytCoin}&tsyms=${coin}`;
   showSpinner();
-  fetch(url)
-    .then((res) => res.json())
-    .then((res) => showResult(res.DISPLAY[crytCoin][coin]));
-
-  //   crytcoinsForm.reset();
+  try {
+    const response = await fetch(url);
+    const result = await response.json();
+    showResult(result.DISPLAY[crytCoin][coin]);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function showResult(results) {
